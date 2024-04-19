@@ -1,0 +1,75 @@
+version: "3.5"
+name: mayoffka-tickets
+
+services:
+  budibase:
+    image: budibase/budibase:2.23.5
+    container_name: budibase-mayoffka
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - budibase-data:/data
+    environment:
+      TZ: Europe/Moscow
+      QUERY_THREAD_TIMEOUT: 100000
+    dns:
+      - 8.8.8.8
+      - 4.4.4.4
+      - 192.168.9.45
+    links:
+      - "db:database"
+      - "api:api"
+    #extra_hosts:
+    #- "host.docker.internal:host-gateway"
+
+  db:
+    image: mysql:latest
+    container_name: mysql-mayoffka
+    command: --authentication_policy=caching_sha2_password --sql_mode=""
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'mayoffka'
+
+      ### Пароль для базы данных - поменять
+      MYSQL_ROOT_PASSWORD: 12345678
+      ###
+
+      TZ: Europe/Moscow
+
+    ##### Убрать - порты должны быть закрыты
+    #ports:
+    #  - 3306:3306
+    #####
+
+    volumes:
+      - my-db:/var/lib/mysql
+      - ./dumps/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  api:
+    build: .
+    container_name: api-mayoffka
+    command: bash -c "gunicorn -k uvicorn.workers.UvicornWorker main:app -b 0.0.0.0:8000"
+    restart: always
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: root
+
+      ### Пароль для базы данных - поменять
+      DB_PASSWORD: 12345678
+      ###
+
+      DB_NAME: 'mayoffka'
+    links:
+      - "db:database"
+    ### Порты должны быть закрыты
+    #ports:
+    #  - "8001:8000"
+
+volumes:
+  my-db:
+    driver: local
+  budibase-data:
+    driver: local
