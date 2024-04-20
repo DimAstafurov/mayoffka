@@ -61,8 +61,10 @@ services:
       ###
 
       DB_NAME: 'mayoffka'
+      BUDIBASE_HOST: 'budibase'
     links:
       - "db:database"
+      - "budibase:budibase"
     ### Порты должны быть закрыты
     #ports:
     #  - "8001:8000"
