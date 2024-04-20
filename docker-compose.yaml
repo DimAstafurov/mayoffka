@@ -17,9 +17,11 @@ services:
       - 8.8.8.8
       - 4.4.4.4
       - 192.168.9.45
-    links:
-      - "db:database"
-      - "api:api"
+    networks:
+      - backnet
+    #links:
+    #  - "db:database"
+    #  - "api:api"
     #extra_hosts:
     #- "host.docker.internal:host-gateway"
 
@@ -41,7 +43,8 @@ services:
     #ports:
     #  - 3306:3306
     #####
-
+    networks:
+      - backnet
     volumes:
       - my-db:/var/lib/mysql
       - ./dumps/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -62,12 +65,17 @@ services:
 
       DB_NAME: 'mayoffka'
       BUDIBASE_HOST: 'budibase'
-    links:
-      - "db:database"
-      - "budibase:budibase"
+    networks:
+      - backnet
+    #links:
+    #  - "db:database"
+    #  - "budibase:budibase"
     ### Порты должны быть закрыты
     #ports:
     #  - "8001:8000"
+
+networks:
+  backnet:
 
 volumes:
   my-db:
