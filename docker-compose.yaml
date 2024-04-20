@@ -34,7 +34,7 @@ services:
       MYSQL_DATABASE: 'mayoffka'
 
       ### Пароль для базы данных - поменять
-      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_ROOT_PASSWORD: '12345678'
       ###
 
       TZ: Europe/Moscow
@@ -60,7 +60,7 @@ services:
       DB_USER: root
 
       ### Пароль для базы данных - поменять
-      DB_PASSWORD: 12345678
+      DB_PASSWORD: '12345678'
       ###
 
       DB_NAME: 'mayoffka'
