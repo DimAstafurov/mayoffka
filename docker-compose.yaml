@@ -12,7 +12,7 @@ services:
       - budibase-data:/data
     environment:
       TZ: Europe/Moscow
-      QUERY_THREAD_TIMEOUT: 100000
+      QUERY_THREAD_TIMEOUT: 10000000
     dns:
       - 8.8.8.8
       - 4.4.4.4
